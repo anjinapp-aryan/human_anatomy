@@ -57,6 +57,8 @@ button:focus-visible, input:focus-visible, canvas:focus-visible {
   border: 0;
   padding: 0;
   background: transparent;
+  color: inherit;
+  text-decoration: none;
   cursor: pointer;
   text-align: left;
 }
@@ -83,7 +85,7 @@ button:focus-visible, input:focus-visible, canvas:focus-visible {
   gap: 2px;
 }
 
-.main-nav button {
+.main-nav button, .main-nav a {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -91,10 +93,20 @@ button:focus-visible, input:focus-visible, canvas:focus-visible {
   padding: 12px 15px;
   border-radius: 999px;
   background: transparent;
+  color: inherit;
+  text-decoration: none;
   cursor: pointer;
   white-space: nowrap;
 }
-.main-nav button.active { background: rgba(238, 124, 106, .075); box-shadow: inset 0 0 0 1px rgba(215, 112, 91, .12); }
+.main-nav button:hover, .main-nav a:hover { background: rgba(238, 124, 106, .05); }
+/* Active state is carried by weight and an inset border as well as colour, so it
+   does not depend on colour perception alone. */
+.main-nav .active {
+  background: rgba(238, 124, 106, .075);
+  box-shadow: inset 0 0 0 1px rgba(215, 112, 91, .12);
+  color: #a4503c;
+  font-weight: 600;
+}
 
 .search-box {
   justify-self: end;
@@ -487,6 +499,197 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
 .quiz-options button { padding: 12px; border: 1px solid var(--line); border-radius: 10px; background: rgba(255,255,255,.5); cursor: pointer; }
 .drawer-backdrop { display: none; }
 
+/* ------------------------------------------------------------------ pages
+   Systems, Library, and Notes. These reuse the shell padding, typography, and
+   colour tokens of the Explore view, but scroll normally instead of locking to
+   the viewport the way the 3D workspace does. */
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0;
+  overflow: hidden; clip-path: inset(50%); white-space: nowrap;
+}
+.search-spacer { justify-self: end; }
+
+.page-shell { min-height: 100vh; padding: 22px 24px 48px; }
+.page-body { max-width: 1720px; margin: 0 auto; padding-top: 26px; }
+
+.page-heading { margin-bottom: 26px; }
+.page-heading em { display: block; margin-bottom: 4px; font-size: 12px; }
+.page-heading h1 { margin: 0 0 8px; font: 500 clamp(30px, 3vw, 46px)/1.05 var(--font-serif), serif; letter-spacing: -.03em; }
+.page-heading p { margin: 0; max-width: 62ch; color: var(--muted); font-size: 13px; line-height: 1.6; }
+
+.back-link, .page-footer-nav a {
+  display: inline-flex; align-items: center; gap: 7px; margin-bottom: 18px;
+  color: var(--muted); font-size: 12px; text-decoration: none;
+}
+.back-link:hover { color: var(--ink); }
+.page-footer-nav { margin-top: 30px; padding-top: 18px; border-top: 1px solid var(--line); }
+.page-footer-nav a { margin: 0; }
+
+.empty-state { color: var(--muted); font: 500 15px var(--font-serif), serif; }
+.empty-state-block {
+  display: grid; place-items: center; gap: 6px; padding: 54px 20px; text-align: center;
+  border: 1px dashed var(--line); border-radius: 20px; background: rgba(255,251,244,.5); color: var(--muted);
+}
+.empty-state-block p { margin: 0; }
+.empty-state-block strong { color: var(--ink); font-size: 16px; }
+.empty-state-block .primary-action { margin-top: 12px; }
+
+.notice { margin: 0 0 18px; padding: 12px 15px; border-radius: 12px; font-size: 12px; line-height: 1.5; }
+.notice-error { border: 1px solid rgba(196,104,84,.32); background: rgba(238,124,106,.09); color: #8c4a3c; }
+
+.primary-action {
+  display: inline-flex; align-items: center; gap: 8px; padding: 11px 18px;
+  border: 1px solid rgba(82,64,50,.22); border-radius: 999px;
+  background: linear-gradient(140deg, #c46854, #e39a80); color: #fff;
+  font: 500 13px var(--font-serif), serif; cursor: pointer; box-shadow: var(--shadow);
+}
+.primary-action:hover { filter: brightness(1.04); }
+.primary-action:disabled { opacity: .5; cursor: not-allowed; }
+.primary-action.danger { background: linear-gradient(140deg, #b4503f, #d0705c); }
+
+/* -- Systems ------------------------------------------------------------- */
+
+.system-grid, .organ-grid, .library-list, .notes-list { list-style: none; margin: 0; padding: 0; }
+.system-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(268px, 1fr)); gap: 16px; }
+
+.system-tile {
+  display: flex; flex-direction: column; height: 100%; padding: 20px;
+  border: 1px solid var(--line); border-radius: 20px; background: var(--paper);
+  box-shadow: var(--shadow); color: inherit; text-decoration: none; transition: transform .2s, box-shadow .2s;
+}
+.system-tile:hover { transform: translateY(-2px); box-shadow: 0 20px 44px rgba(87,62,43,.11); }
+.system-tile-art { display: flex; gap: 5px; margin-bottom: 14px; }
+.system-tile-art i { width: 26px; height: 8px; border-radius: 999px; }
+.system-tile h2 { margin: 0; font: 500 21px var(--font-serif), serif; }
+.system-tile small { color: var(--lavender); font-size: 10px; text-transform: uppercase; letter-spacing: .1em; }
+.system-tile p { margin: 10px 0 16px; flex: 1; color: var(--muted); font-size: 12px; line-height: 1.5; }
+.system-tile-go { display: inline-flex; align-items: center; gap: 6px; font: 500 12px var(--font-serif), serif; color: var(--coral); }
+
+/* -- Organ tiles (system detail) ---------------------------------------- */
+
+.organ-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
+.organ-tile {
+  display: flex; flex-direction: column; height: 100%; padding: 20px;
+  border: 1px solid var(--line); border-radius: 20px; background: var(--paper); box-shadow: var(--shadow);
+}
+.organ-tile > header { display: flex; align-items: center; gap: 13px; margin-bottom: 12px; }
+.organ-tile header img { width: 54px; height: 54px; object-fit: contain; mix-blend-mode: multiply; }
+.organ-tile h2 { margin: 0; font: 500 22px var(--font-serif), serif; }
+.organ-tile header small { color: var(--muted); font-size: 11px; font-style: italic; }
+.organ-tile > p { margin: 0 0 14px; color: var(--muted); font-size: 12px; line-height: 1.55; }
+.organ-tile dl { margin: 0 0 16px; display: grid; gap: 9px; flex: 1; }
+.organ-tile dt { color: var(--muted); font-size: 9px; text-transform: uppercase; letter-spacing: .1em; }
+.organ-tile dd { margin: 3px 0 0; font: 500 12px/1.35 var(--font-serif), serif; }
+
+.tile-glyph {
+  display: grid; place-items: center; width: 46px; height: 46px; flex: none; border-radius: 50%;
+  background: rgba(238,124,106,.1); color: var(--coral); font-size: 21px;
+}
+.tile-cta, .library-row-go {
+  display: inline-flex; align-items: center; gap: 7px;
+  font: 500 12px var(--font-serif), serif; color: var(--coral); text-decoration: none;
+}
+.tile-cta { align-self: flex-start; padding: 9px 15px; border: 1px solid rgba(215,112,91,.28); border-radius: 999px; background: rgba(238,124,106,.07); }
+.tile-cta:hover { background: rgba(238,124,106,.13); }
+
+/* -- Library ------------------------------------------------------------- */
+
+.library-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; margin-bottom: 22px; }
+.filter-row { display: flex; gap: 6px; }
+.filter-row button {
+  padding: 9px 16px; border: 1px solid var(--line); border-radius: 999px;
+  background: rgba(255,255,255,.4); cursor: pointer; font-size: 12px;
+}
+/* Active state is carried by weight and border as well as colour. */
+.filter-row button.active {
+  border-color: rgba(215,112,91,.42); background: rgba(238,124,106,.12);
+  color: #a4503c; font-weight: 600;
+}
+.result-count { margin: 0; color: var(--muted); font-size: 11px; }
+
+.library-section { margin-bottom: 30px; }
+.library-section h2 {
+  margin: 0 0 12px; color: var(--muted); font-size: 10px;
+  text-transform: uppercase; letter-spacing: .14em; font-weight: 600;
+}
+.library-list { display: grid; gap: 9px; }
+.library-row {
+  display: flex; align-items: center; gap: 14px; padding: 13px 16px;
+  border: 1px solid var(--line); border-radius: 15px; background: var(--paper);
+  color: inherit; text-decoration: none; transition: border-color .18s, transform .18s;
+}
+.library-row:hover { border-color: rgba(215,112,91,.4); transform: translateX(2px); }
+.library-row img { width: 46px; height: 46px; flex: none; object-fit: contain; mix-blend-mode: multiply; }
+.library-row-text { display: flex; flex-direction: column; flex: 1; min-width: 0; }
+.library-row-text strong { font: 500 17px var(--font-serif), serif; }
+.library-row-text small { color: var(--muted); font-size: 11px; }
+.library-row-go { flex: none; }
+
+/* -- Notes --------------------------------------------------------------- */
+
+.notes-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
+.notes-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(292px, 1fr)); gap: 16px; }
+.note-card {
+  display: flex; flex-direction: column; height: 100%; padding: 19px;
+  border: 1px solid var(--line); border-radius: 18px; background: var(--paper); box-shadow: var(--shadow);
+}
+.note-card h2 { margin: 0 0 8px; font: 500 20px var(--font-serif), serif; overflow-wrap: anywhere; }
+.note-tag {
+  align-self: flex-start; display: inline-flex; align-items: center; gap: 5px; margin-bottom: 10px;
+  padding: 4px 10px; border-radius: 999px; background: rgba(141,107,204,.1);
+  color: var(--lavender); font-size: 10px; text-decoration: none;
+}
+.note-card > p {
+  margin: 0 0 14px; flex: 1; color: var(--muted); font-size: 12.5px; line-height: 1.6;
+  white-space: pre-wrap; overflow-wrap: anywhere;
+}
+.note-card footer { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; padding-top: 12px; border-top: 1px solid var(--line); }
+.note-card footer small { color: var(--muted); font-size: 10px; }
+.note-actions { display: flex; gap: 6px; }
+.note-actions button {
+  display: inline-flex; align-items: center; gap: 5px; padding: 6px 11px;
+  border: 1px solid var(--line); border-radius: 999px; background: rgba(255,255,255,.55);
+  cursor: pointer; font-size: 11px;
+}
+.note-actions button:hover { border-color: rgba(215,112,91,.4); }
+.note-actions .danger { color: #a4503c; }
+
+.note-dialog {
+  position: relative; width: min(520px, 100%); max-height: 92vh; overflow: auto;
+  padding: 30px; border: 1px solid var(--line); border-radius: 24px; background: #fffaf2;
+  box-shadow: 0 30px 90px rgba(63,42,28,.24); animation: modal-in .3s cubic-bezier(.2,.85,.3,1);
+}
+.note-dialog.compact { width: min(420px, 100%); }
+.note-dialog h2 { margin: 0 0 6px; font: 500 27px var(--font-serif), serif; }
+.note-dialog > p { margin: 0 0 18px; color: var(--muted); font-size: 12.5px; line-height: 1.6; }
+.note-dialog label { display: block; margin: 14px 0 6px; color: var(--muted); font-size: 10px; text-transform: uppercase; letter-spacing: .1em; }
+.note-dialog input, .note-dialog textarea, .note-dialog select {
+  width: 100%; padding: 11px 13px; border: 1px solid var(--line); border-radius: 11px;
+  background: rgba(255,255,255,.72); color: var(--ink); font: inherit; font-size: 13px;
+}
+.note-dialog textarea { resize: vertical; min-height: 120px; line-height: 1.55; }
+.note-dialog input:focus-visible, .note-dialog textarea:focus-visible, .note-dialog select:focus-visible { outline: 2px solid #8b6fc4; outline-offset: 2px; }
+.dialog-actions { display: flex; justify-content: flex-end; gap: 9px; margin-top: 22px; }
+.dialog-actions button:not(.primary-action) {
+  padding: 11px 18px; border: 1px solid var(--line); border-radius: 999px;
+  background: rgba(255,255,255,.55); cursor: pointer; font-size: 13px;
+}
+
+.fact-link { color: var(--coral); }
+
+@media (max-width: 760px) {
+  .page-shell { padding: 10px 12px 36px; }
+  .page-body { padding-top: 18px; }
+  .system-grid, .organ-grid, .notes-list { grid-template-columns: 1fr; }
+  .notes-heading { flex-direction: column; }
+  .library-row { flex-wrap: wrap; }
+  .library-row-go { width: 100%; justify-content: flex-end; }
+  .note-dialog { padding: 22px; border-radius: 20px; }
+  .dialog-actions { flex-direction: column-reverse; }
+  .dialog-actions button, .dialog-actions .primary-action { width: 100%; justify-content: center; }
+}
+
 /* Persistent educational disclaimer. Sits at the end of the page flow so it is
    always reachable without ever covering the viewer or interrupting a session. */
 .site-disclaimer {
@@ -510,7 +713,7 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
   .app-shell { padding: 16px; }
   .topbar { grid-template-columns: 1fr auto auto; gap: 12px; }
   .brand em { display: none; }
-  .search-box { display: none; }
+  .search-box, .search-spacer { display: none; }
   .workspace { grid-template-columns: 250px minmax(500px,1fr) 300px; height: min(700px, calc(100vh - 105px)); }
   .learning-cards { grid-template-columns: repeat(3, 1fr); --art-max: 300px; }
 }
@@ -530,9 +733,22 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
 
 @media (max-width: 760px) {
   .app-shell { padding: 10px; overflow: hidden; }
-  .topbar { height: 58px; grid-template-columns: 1fr auto auto; }
+  /* The nav used to be hidden here, which left Systems, Library, and Notes
+     unreachable on a phone. It now wraps to its own scrollable row instead. */
+  .topbar { height: auto; grid-template-columns: 1fr auto auto; row-gap: 6px; padding-bottom: 4px; }
   .brand strong { font-size: 29px; }
-  .main-nav { display: none; }
+  .main-nav {
+    display: flex;
+    grid-column: 1 / -1;
+    grid-row: 2;
+    justify-content: flex-start;
+    gap: 2px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .main-nav::-webkit-scrollbar { display: none; }
+  .main-nav button, .main-nav a { flex: none; padding: 8px 11px; font-size: 12px; }
   .profile .profile-avatar { width: 34px; height: 34px; font-size: 12px; }
   .profile .profile-name { font-size: 12px; }
   .mobile-library-trigger { display: flex; }

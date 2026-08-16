@@ -4,25 +4,23 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import gsap from "gsap";
 import {
   ArrowRight,
-  BookOpen,
   Bookmark,
   BrainCircuit,
   CircleHelp,
-  Compass,
   FileText,
   Heart,
-  LibraryBig,
   Microscope,
-  NotebookPen,
   Play,
-  Search,
   Share2,
   Sparkles,
   Stethoscope,
   X,
 } from "lucide-react";
+import Link from "next/link";
 import { OrganViewer } from "./OrganViewer";
+import { SiteHeader } from "./SiteHeader";
 import { organById, organs, type Organ, type OrganId } from "../lib/anatomy-data";
+import { systemSlug } from "../lib/systems";
 
 type Modal = "lesson" | "quiz" | "animation" | "system" | null;
 
@@ -65,8 +63,8 @@ function OrganArt({
   );
 }
 
-export function AnatomyApp() {
-  const [organId, setOrganId] = useState<OrganId>("heart");
+export function AnatomyApp({ initialOrganId = "heart" }: { initialOrganId?: OrganId }) {
+  const [organId, setOrganId] = useState<OrganId>(initialOrganId);
   const [autoRotate, setAutoRotate] = useState(true);
   const [compare, setCompare] = useState(false);
   const [modal, setModal] = useState<Modal>(null);
@@ -111,31 +109,16 @@ export function AnatomyApp() {
 
   return (
     <main className="app-shell">
-      <header className="topbar">
-        <button className="brand" type="button" onClick={() => selectOrgan("heart")} aria-label="Anatomy Atelier home">
-          <strong>Anatomy Atelier<sup>✦</sup></strong>
-          <em>Learn anatomy like an artist</em>
-        </button>
-        <nav className="main-nav" aria-label="Primary navigation">
-          <button className="active"><Compass size={17} /> Explore</button>
-          <button><BrainCircuit size={17} /> Systems</button>
-          <button onClick={() => setModal("lesson")}><BookOpen size={17} /> Lessons</button>
-          <button><LibraryBig size={17} /> Library</button>
-          <button><NotebookPen size={17} /> Notes</button>
-        </nav>
-        <label className="search-box">
-          <Search size={17} />
-          <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search organs, topics…" />
-        </label>
-        {/* Static attribution for the demo owner. Not an account: there is no
-            authentication, session, or profile behind it, so it is rendered as
-            plain text rather than a control that promises an action. */}
-        <div className="profile">
-          <span className="profile-avatar" aria-hidden="true">A</span>
-          <span className="profile-name">Aryan</span>
-        </div>
-        <button className="mobile-library-trigger" onClick={() => setMobileLibrary(true)} aria-label="Open organ library"><LibraryBig size={20} /></button>
-      </header>
+      <SiteHeader
+        search={{
+          value: query,
+          onChange: setQuery,
+          placeholder: "Search organs, topics…",
+          label: "Filter the organ library",
+        }}
+        onOpenLessons={() => setModal("lesson")}
+        onOpenMobileLibrary={() => setMobileLibrary(true)}
+      />
 
       <div className="workspace">
         <aside className={`organ-library ${mobileLibrary ? "open" : ""}`}>
@@ -329,11 +312,16 @@ function LearningModal({ type, organ, onClose }: { type: Exclude<Modal, null>; o
               <OrganArt organ={organ} asset="location" alt={`${organName} shown in place within the ${organ.system.toLowerCase()}`} />
             </figure>
             <dl className="modal-facts">
-              <div><dt>System</dt><dd>{organ.system}</dd></div>
+              <div>
+                <dt>System</dt>
+                <dd><Link className="fact-link" href={`/systems/${systemSlug(organ.system)}`}>{organ.system}</Link></dd>
+              </div>
               <div><dt>Primary role</dt><dd>{organ.function}</dd></div>
               <div><dt>Blood supply</dt><dd>{organ.bloodSupply}</dd></div>
             </dl>
-            <button className="lesson-button" onClick={onClose}>Continue exploring <ArrowRight size={16} /></button>
+            <Link className="lesson-button" href={`/systems/${systemSlug(organ.system)}`}>
+              Open the {organ.system.toLowerCase().replace(/ system$/, "")} system <ArrowRight size={16} />
+            </Link>
           </>
         ) : (
           <>
