@@ -7,7 +7,6 @@ import {
   BookOpen,
   Bookmark,
   BrainCircuit,
-  ChevronDown,
   CircleHelp,
   Compass,
   FileText,
@@ -128,7 +127,13 @@ export function AnatomyApp() {
           <Search size={17} />
           <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search organs, topics…" />
         </label>
-        <button className="profile" aria-label="Open learner profile"><span>MA</span><ChevronDown size={15} /></button>
+        {/* Static attribution for the demo owner. Not an account: there is no
+            authentication, session, or profile behind it, so it is rendered as
+            plain text rather than a control that promises an action. */}
+        <div className="profile">
+          <span className="profile-avatar" aria-hidden="true">A</span>
+          <span className="profile-name">Aryan</span>
+        </div>
         <button className="mobile-library-trigger" onClick={() => setMobileLibrary(true)} aria-label="Open organ library"><LibraryBig size={20} /></button>
       </header>
 
@@ -262,6 +267,15 @@ export function AnatomyApp() {
           <button onClick={() => setModal("system")}>See the system <ArrowRight size={14} /></button>
         </article>
       </section>
+
+      <footer className="site-disclaimer">
+        <p>
+          <strong>Educational use.</strong> Anatomy Atelier is an interactive anatomy education and
+          visualisation tool. It is not intended to provide medical advice, diagnosis, treatment
+          recommendations, or clinical decision support, and it is not a substitute for professional
+          medical advice. The 3D models are illustrative and are not anatomically verified.
+        </p>
+      </footer>
 
       {modal && <LearningModal type={modal} organ={organ} onClose={() => setModal(null)} />}
       {mobileLibrary && <button className="drawer-backdrop" aria-label="Close library" onClick={() => setMobileLibrary(false)} />}

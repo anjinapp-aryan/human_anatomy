@@ -120,18 +120,22 @@ button:focus-visible, input:focus-visible, canvas:focus-visible {
   background: transparent;
   cursor: pointer;
 }
-.profile span {
+/* Static attribution, not a control — so it does not take a pointer cursor. */
+.profile { cursor: default; }
+.profile .profile-avatar {
   width: 38px;
   height: 38px;
+  flex: none;
   border: 1px solid rgba(82,64,50,.5);
   border-radius: 50%;
   display: grid;
   place-items: center;
   background: linear-gradient(140deg, #c46854, #efb59c);
   color: white;
-  font: 600 11px var(--font-serif), serif;
+  font: 600 13px var(--font-serif), serif;
   box-shadow: inset 0 0 0 3px #f7eee5;
 }
+.profile .profile-name { font: 500 13px var(--font-serif), serif; white-space: nowrap; }
 .mobile-library-trigger { display: none; }
 
 .workspace {
@@ -483,6 +487,25 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
 .quiz-options button { padding: 12px; border: 1px solid var(--line); border-radius: 10px; background: rgba(255,255,255,.5); cursor: pointer; }
 .drawer-backdrop { display: none; }
 
+/* Persistent educational disclaimer. Sits at the end of the page flow so it is
+   always reachable without ever covering the viewer or interrupting a session. */
+.site-disclaimer {
+  max-width: 1720px;
+  margin: 18px auto 4px;
+  padding: 14px 18px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: rgba(255, 251, 244, 0.55);
+}
+.site-disclaimer p {
+  margin: 0;
+  max-width: 92ch;
+  color: #6a615a;
+  font-size: 11.5px;
+  line-height: 1.6;
+}
+.site-disclaimer strong { color: var(--ink); font-weight: 600; }
+
 @media (max-width: 1350px) {
   .app-shell { padding: 16px; }
   .topbar { grid-template-columns: 1fr auto auto; gap: 12px; }
@@ -510,7 +533,8 @@ button.organ-card-image:focus-visible { outline: 2px solid #8b6fc4; outline-offs
   .topbar { height: 58px; grid-template-columns: 1fr auto auto; }
   .brand strong { font-size: 29px; }
   .main-nav { display: none; }
-  .profile span { width: 34px; height: 34px; }
+  .profile .profile-avatar { width: 34px; height: 34px; font-size: 12px; }
+  .profile .profile-name { font-size: 12px; }
   .mobile-library-trigger { display: flex; }
   .workspace { display: block; margin-top: 8px; }
   .viewer-shell { height: 68vh; min-height: 520px; border-radius: 22px; }

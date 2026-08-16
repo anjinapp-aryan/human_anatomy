@@ -36,9 +36,9 @@ export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: "Anatomy Atelier — Learn anatomy like an artist",
   description:
-    "Explore medically detailed 3D organs — heart, brain, lungs, liver, kidneys, eye, intestine, pancreas, and skin — through an elegant, interactive anatomy atelier.",
+    "Explore interactive 3D anatomy models — heart, brain, lungs, liver, kidneys, eye, intestine, pancreas, and skin — designed for learning in an elegant anatomy atelier.",
   applicationName: "Anatomy Atelier",
-  keywords: ["anatomy", "3D anatomy", "human body", "medical education", "interactive learning", "organs"],
+  keywords: ["anatomy", "3D anatomy", "human body", "anatomy education", "interactive learning", "organs"],
   icons: {
     icon: [
       { url: "/favicon.svg", type: "image/svg+xml" },
@@ -52,13 +52,13 @@ export const metadata: Metadata = {
     type: "website",
     siteName: "Anatomy Atelier",
     title: "Anatomy Atelier — Learn anatomy like an artist",
-    description: "Learn anatomy like an artist through immersive, medically detailed 3D specimens.",
+    description: "Learn anatomy like an artist through immersive, interactive 3D anatomical specimens.",
     images: [OG_IMAGE],
   },
   twitter: {
     card: "summary_large_image",
     title: "Anatomy Atelier — Learn anatomy like an artist",
-    description: "Learn anatomy like an artist through immersive, medically detailed 3D specimens.",
+    description: "Learn anatomy like an artist through immersive, interactive 3D anatomical specimens.",
     images: [OG_IMAGE],
   },
 };
